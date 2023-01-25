@@ -5,14 +5,19 @@ import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 
 error NFT_SOLD_OUT();
 error SEND_SUFFICENT_FIL();
+error ONLY_ONWER_CAN_CALL_FUNCTION();
 
 contract Course is ERC1155 { 
-    // maximum number of NFT 
+    // variable to store maximum number of NFT 
     uint public maxSupply;
     // counter to keep track how many NFT are minted
     uint public counter;
-    // setting the NFT Price;
+    // variable to store the NFT Price;
     uint public nftPrice;
+    // variable to store factoryContract Address
+    address payable factoryContractAddress;
+    // variable to store onwer Address
+    address payable owner;
 
     /**
      * @dev contructor to set the _uri(metadata), maxSupply , Price of NFT 
@@ -20,10 +25,12 @@ contract Course is ERC1155 {
      * @param _supply get the maxSupply, total number of NFT
      * @param _nftPrice get the price of NFT
      */
-    constructor(string memory _uri, uint256 _supply , uint _nftPrice) ERC1155(_uri){
+    constructor(string memory _uri, uint256 _supply , uint _nftPrice, address _factoryContractAddress) ERC1155(_uri){
         _setURI(_uri);
         maxSupply = _supply;
-        nftPrice = _nftPrice * 10**18;
+        nftPrice = _nftPrice;
+        factoryContractAddress = payable(_factoryContractAddress);
+        owner = payable(msg.sender);
     }
 
     /**
@@ -54,6 +61,26 @@ contract Course is ERC1155 {
         counter += _num;
         _mint(msg.sender, 0 , _num, "");
     }
+
+    function withdraw() public payable{
+         if(msg.sender != owner){
+            revert ONLY_ONWER_CAN_CALL_FUNCTION();
+        }
+        if(getContractBalance() < amount){
+            revert NOT_ENOUGH_BALANCE();
+        }
+    }
+
+    // get the balance of the contract
+    function getContractBalance() public view returns (uint256) {
+        return address(this).balance;
+    }
+
+    // get the address of this contract
+    function getAddressOfContract() public view returns (address) {
+        return address(this);
+    }
+    
 
     // receive function is used to receive Ether when msg.data is empty
     receive() external payable {}
