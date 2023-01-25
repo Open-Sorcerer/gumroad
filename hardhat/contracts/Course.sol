@@ -6,6 +6,7 @@ import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 error NFT_SOLD_OUT();
 error SEND_SUFFICENT_FIL();
 error ONLY_ONWER_CAN_CALL_FUNCTION();
+error NOT_ENOUGH_BALANCE();
 
 contract Course is ERC1155 { 
     // variable to store maximum number of NFT 
@@ -62,8 +63,8 @@ contract Course is ERC1155 {
         _mint(msg.sender, 0 , _num, "");
     }
 
-    function withdraw() public payable{
-         if(msg.sender != owner){
+    function withdraw(uint amount) public payable{
+        if(msg.sender != owner){
             revert ONLY_ONWER_CAN_CALL_FUNCTION();
         }
         if(getContractBalance() < amount){
@@ -79,6 +80,11 @@ contract Course is ERC1155 {
     // get the address of this contract
     function getAddressOfContract() public view returns (address) {
         return address(this);
+    }
+
+    // get the address of contract owner
+    function getAddressOfFactoryCourseOwner() public view returns (address) {
+        return owner;
     }
     
 
