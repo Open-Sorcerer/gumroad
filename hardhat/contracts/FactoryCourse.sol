@@ -36,12 +36,13 @@ contract FactoryCourse{
     /**
      * @dev function to create new NFT collection
      */
-    function CreateCourse(string memory _uri, uint256 _supply , uint _nftPrice) public {
+    function CreateCourse(string memory _uri, uint256 _supply , uint _nftPrice, address _creatorAddress) public {
         Course course = new Course(
             _uri,
             _supply,
             _nftPrice,
-            address(this)
+            address(this),
+            _creatorAddress
         );
     
         // Increment the number of Course
@@ -82,7 +83,7 @@ contract FactoryCourse{
     }
 
     // get the address of this contract
-    function getAddressOfContract() public view returns (address) {
+    function getAddressOfFactoryContract() public view returns (address) {
         return address(this);
     }
 
@@ -91,7 +92,7 @@ contract FactoryCourse{
         return factoryCourseOwner;
     }
 
-    // get all the course NFT addresses deployed by creator address
+    // get all the course NFT addresses deployed by this creator address
     function getSearchByAddress(address _creatorAddress) public view returns(address[] memory){
         return searchByAddress[_creatorAddress];
     }
