@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 
 error NFT_SOLD_OUT();
 error SEND_SUFFICENT_FIL();
-error ONLY_ONWER_CAN_CALL_FUNCTION();
+error ONLY_OWNER_CAN_CALL_FUNCTION();
 error NOT_ENOUGH_BALANCE();
 error TRANSFER_FAILED();
 
@@ -18,7 +18,7 @@ contract Course is ERC1155 {
     uint public nftPrice;
     // variable to store factoryContract Address
     address payable public factoryContractAddress;
-    // variable to store onwer Address
+    // variable to store owner Address
     address payable public owner;
 
     /**
@@ -66,7 +66,7 @@ contract Course is ERC1155 {
 
     function withdraw(uint _amount, address _withdrawAddress) public payable{
         if(msg.sender != owner){
-            revert ONLY_ONWER_CAN_CALL_FUNCTION();
+            revert ONLY_OWNER_CAN_CALL_FUNCTION();
         }
         if(getContractBalance() < _amount){
             revert NOT_ENOUGH_BALANCE();
