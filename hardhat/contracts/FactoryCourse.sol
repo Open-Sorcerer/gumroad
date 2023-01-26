@@ -3,10 +3,6 @@ pragma solidity ^0.8.9;
 
 import "./Course.sol";
 
-error ONLY_ONWER_CAN_CALL_FUNCTION();
-error TRANSFER_FAILED();
-error NOT_ENOUGH_BALANCE();
-
 contract FactoryCourse{
     // factory contract onwer
     address private factoryCourseOwner;
