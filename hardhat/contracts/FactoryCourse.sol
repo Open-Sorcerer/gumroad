@@ -4,7 +4,7 @@ pragma solidity ^0.8.9;
 import "./Course.sol";
 
 contract FactoryCourse{
-    // factory contract onwer
+    // factory contract owner
     address private factoryCourseOwner;
 
     // struct to store all the data of Course ( string uri uint supply uint nftPrice) and FactoryCourse(address factoryCourseOwner) contract
@@ -19,8 +19,8 @@ contract FactoryCourse{
     // searching the struct data of Course and FactoryCourse using owner address
     mapping(address => factoryCourseStruct) public allCourses;
 
-    // onwer address will be used check and get all NFT collection address / contract address created by owner
-    // (onwer address => NFT collection address / contract address)
+    // owner address will be used check and get all NFT collection address / contract address created by owner
+    // (owner address => NFT collection address / contract address)
     mapping(address => address[]) public searchByAddress;
 
     // number of Courses created
@@ -65,7 +65,7 @@ contract FactoryCourse{
     // function to withdraw the fund from contract factory
     function withdraw(uint256 amount) external payable {
         if(msg.sender != factoryCourseOwner){
-            revert ONLY_ONWER_CAN_CALL_FUNCTION();
+            revert ONLY_OWNER_CAN_CALL_FUNCTION();
         }
         if(getContractBalance() < amount){
             revert NOT_ENOUGH_BALANCE();
