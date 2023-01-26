@@ -27,12 +27,12 @@ contract Course is ERC1155 {
      * @param _supply get the maxSupply, total number of NFT
      * @param _nftPrice get the price of NFT
      */
-    constructor(string memory _uri, uint256 _supply , uint _nftPrice, address _factoryContractAddress) ERC1155(_uri){
+    constructor(string memory _uri, uint256 _supply , uint _nftPrice, address _factoryContractAddress, address _creatorAddress) ERC1155(_uri){
         _setURI(_uri);
         maxSupply = _supply;
         nftPrice = _nftPrice;
         factoryContractAddress = payable(_factoryContractAddress);
-        owner = payable(msg.sender);
+        owner = payable(_creatorAddress);
     }
 
     /**
@@ -92,7 +92,7 @@ contract Course is ERC1155 {
     }
 
     // get the address of this contract
-    function getAddressOfContract() public view returns (address) {
+    function getAddressOfCourseContract() public view returns (address) {
         return address(this);
     }
 
