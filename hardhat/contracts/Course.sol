@@ -7,6 +7,7 @@ error NFT_SOLD_OUT();
 error SEND_SUFFICENT_FIL();
 error ONLY_ONWER_CAN_CALL_FUNCTION();
 error NOT_ENOUGH_BALANCE();
+error TRANSFER_FAILED();
 
 contract Course is ERC1155 { 
     // variable to store maximum number of NFT 
@@ -16,9 +17,9 @@ contract Course is ERC1155 {
     // variable to store the NFT Price;
     uint public nftPrice;
     // variable to store factoryContract Address
-    address payable factoryContractAddress;
+    address payable public factoryContractAddress;
     // variable to store onwer Address
-    address payable owner;
+    address payable public owner;
 
     /**
      * @dev contructor to set the _uri(metadata), maxSupply , Price of NFT 
@@ -63,12 +64,25 @@ contract Course is ERC1155 {
         _mint(msg.sender, 0 , _num, "");
     }
 
-    function withdraw(uint amount) public payable{
+    function withdraw(uint _amount, address _withdrawAddress) public payable{
         if(msg.sender != owner){
             revert ONLY_ONWER_CAN_CALL_FUNCTION();
         }
-        if(getContractBalance() < amount){
+        if(getContractBalance() < _amount){
             revert NOT_ENOUGH_BALANCE();
+        }
+
+        // sending money to factory owner
+        uint commissionAmount = (_amount * 5) / 100; 
+        (bool success, ) = factoryContractAddress.call{value: commissionAmount }("");
+        if(!success){
+            revert TRANSFER_FAILED();
+        }
+
+        // sending money to content creator
+        (bool success1, ) = _withdrawAddress.call{value: _amount - commissionAmount}("");
+        if(!success1){
+            revert TRANSFER_FAILED();
         }
     }
 
