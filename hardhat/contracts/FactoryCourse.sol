@@ -7,7 +7,9 @@ contract FactoryCourse{
     // factory contract owner
     address private factoryCourseOwner;
 
-    // struct to store all the data of Course ( string uri uint supply uint nftPrice) and FactoryCourse(address factoryCourseOwner) contract
+    /**
+     * @notice struct to store all the data of Course ( string uri uint supply uint nftPrice) and FactoryCourse(address factoryCourseOwner) contract
+     */
     struct factoryCourseStruct {
         string uri;
         uint supply;
@@ -16,11 +18,17 @@ contract FactoryCourse{
         address factoryCourseOwner;
     }
 
-    // searching the struct data of Course and FactoryCourse using owner address
+    /**
+     * @notice searching the struct data of Course and FactoryCourse using owner address
+     */
     mapping(address => factoryCourseStruct) public allCourses;
 
     // owner address will be used check and get all NFT collection address / contract address created by owner
     // (owner address => NFT collection address / contract address)
+    /**
+     * @notice owner address will be used check and get all NFT collection address / contract address created by owner
+     * logic (owner address => NFT collection address / contract address)
+     */
     mapping(address => address[]) public searchByAddress;
 
     // number of Courses created
